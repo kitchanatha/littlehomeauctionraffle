@@ -344,7 +344,11 @@ async function refreshRound() {
     const closesAt = new Date(currentRound.closes_at).getTime();
     if (currentRound.status === 'open' && now >= closesAt && !drawAttempted) {
       drawAttempted = true;
-      await supabase.rpc('draw_raffle_round', { p_round_id: currentRound.id }).catch(() => {});
+      try {
+        await supabase.rpc('draw_raffle_round', { p_round_id: currentRound.id });
+      } catch (err) {
+        console.error('Auto-draw failed:', err);
+      }
       const { data: fresh } = await supabase.rpc('get_current_raffle_round');
       if (fresh && fresh[0]) currentRound = fresh[0];
     }
