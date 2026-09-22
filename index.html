@@ -1,0 +1,122 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>littleHome Item Raffle (Trial)</title>
+  <link rel="stylesheet" href="css/style.css">
+  <meta name="description" content="littleHome Guild Item Raffle System (Trial)">
+
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.png">
+
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#121212">
+</head>
+
+<body>
+
+  <div class="container">
+    <div id="round-banner" class="round-banner hidden"></div>
+
+    <h1 class="main-title">
+      <span id="admin-trigger" class="logo-trigger">
+        <img src="img/logo.png" alt="LH" class="header-logo">
+      </span>
+      LittleHome Item Raffle <span class="trial-badge">TRIAL</span>
+    </h1>
+
+    <div id="admin-actions" class="header-actions hidden">
+      <div class="supabase-config">
+        <h3>Cloud Sync (Supabase)</h3>
+        <input type="text" id="supabase-url" placeholder="Supabase URL (https://xyz.supabase.co)">
+        <input type="password" id="supabase-key" placeholder="Supabase Anon Key">
+        <button onclick="saveSupabaseConfig()">💾 Save & Connect</button>
+        <p class="hint">Run supabase-raffle.sql once first (same project as the main site).</p>
+      </div>
+
+      <div class="supabase-config">
+        <h3>Item Board</h3>
+        <div class="config-item">
+          <label for="item-prefix">Prefix:</label>
+          <input type="text" id="item-prefix" style="width: 60px;">
+        </div>
+        <div class="config-item">
+          <label for="total-items">Total Items:</label>
+          <input type="number" id="total-items" min="1" step="1" style="width: 70px;">
+        </div>
+        <div class="config-item">
+          <label for="items-per-page">Per Page:</label>
+          <input type="number" id="items-per-page" min="1" step="1" style="width: 70px;">
+        </div>
+        <button onclick="saveBoardConfig()">💾 Save Board</button>
+      </div>
+
+      <div class="supabase-config">
+        <h3>Raffle Round</h3>
+        <div id="round-admin-status" class="hint"></div>
+        <div class="config-item">
+          <label for="round-mode">Entry mode:</label>
+          <select id="round-mode">
+            <option value="single">Single — one active entry per person</option>
+            <option value="multi">Multi — unlimited entries per person</option>
+          </select>
+        </div>
+        <div class="config-item">
+          <label for="round-window">Window (seconds):</label>
+          <input type="number" id="round-window" min="10" step="5" value="300" style="width: 80px;">
+        </div>
+        <button onclick="startRound()">🎟️ Start Round</button>
+        <button onclick="forceDrawRound()" class="export-btn">🎲 Draw Now</button>
+        <p class="hint">Entries open the instant the round starts (no separate timer step) and close automatically when the window ends.</p>
+      </div>
+
+      <div class="supabase-config">
+        <h3>Round History</h3>
+        <ul id="round-history-list" class="timer-admins-list"></ul>
+      </div>
+
+      <div class="supabase-config">
+        <h3>Who Can Run Rounds</h3>
+        <ul id="timer-admins-list" class="timer-admins-list"></ul>
+        <div class="timer-admin-add-row">
+          <input type="text" id="new-timer-admin-ign" placeholder="IGN to add">
+          <button onclick="addTimerAdmin()">➕ Add</button>
+        </div>
+        <p class="hint">Same allowlist as the main site's timer admins — only these IGNs can start/draw rounds or edit the board.</p>
+      </div>
+    </div>
+
+    <div class="user-settings">
+      <div id="sync-status" class="sync-status status-local">● Mode: Local Storage</div>
+      <input type="text" id="global-ign" placeholder="Enter your IGN to enter raffles" oninput="saveGlobalIGN()">
+      <p class="hint">Click any open item below to enter its raffle. Being fast doesn't help — the winner is picked randomly after the window closes.</p>
+    </div>
+
+    <div id="items-container" class="items-grid">
+      <!-- Items injected here -->
+    </div>
+
+    <div class="pagination-controls">
+      <div class="nav-buttons">
+        <button onclick="changePage(-1)">⬅️ Previous</button>
+        <span id="page-indicator">Page <span id="current-page-val">1</span> of <span id="total-pages-val">1</span></span>
+        <button onclick="changePage(1)">Next ➡️</button>
+      </div>
+    </div>
+
+    <div class="about-section">
+      <hr>
+      <div class="about-logos">
+        <img src="img/logo.png" alt="littleHome Logo" class="about-logo">
+        <img src="img/logo-white.png" alt="littleHome Logo Variant" class="about-logo">
+      </div>
+      <p class="about-text">littleHome Guild Item Raffle System — Trial Version</p>
+    </div>
+  </div>
+
+</body>
+
+</html>
